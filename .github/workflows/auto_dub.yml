@@ -1,4 +1,4 @@
-﻿name: Auto Dub from Drive
+name: Auto Dub from Drive
 
 # SOURCES (all automatic):
 #   1. Video files dropped in Drive "DubInbox".
@@ -175,6 +175,10 @@ jobs:
           else
             # PO-token provider: defeats YouTube's datacenter-IP bot check.
             docker run -d --name bgutil -p 4416:4416 brainicism/bgutil-ytdlp-pot-provider || true
+            # Deno: JS runtime for yt-dlp's n-challenge solver.
+            curl -fsSL https://deno.land/install.sh | sh -s -- -y >/dev/null 2>&1
+            export PATH="$HOME/.deno/bin:$PATH"
+            deno --version | head -n1
             sleep 6
             CK=""
             if [ -n "$YT_COOKIES_B64" ]; then
