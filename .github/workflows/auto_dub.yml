@@ -1,4 +1,4 @@
-﻿name: Auto Dub from Drive
+name: Auto Dub from Drive
 
 # SOURCES (all automatic):
 #   1. Video files dropped in Drive "DubInbox".
@@ -153,7 +153,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
-          python3 -m pip install -q --upgrade pip requests yt-dlp
+          python3 -m pip install -q --upgrade pip requests yt-dlp bgutil-ytdlp-pot-provider
 
       - name: Get the video (Drive file or yt-dlp)
         id: get
@@ -161,6 +161,7 @@ jobs:
           KIND: ${{ matrix.item.kind }}
           REF: ${{ matrix.item.ref }}
           YT_COOKIES_B64: ${{ secrets.YT_COOKIES_B64 }}
+          YT_PROXY: ${{ secrets.YT_PROXY }}
         run: |
           mkdir -p input output
           if [ "$KIND" = "file" ]; then
@@ -172,15 +173,23 @@ jobs:
             fi
             rclone copy "gdrive:${INBOX}/${REF}" input/ --drive-chunk-size 64M -v
           else
+            # PO-token provider: defeats YouTube's datacenter-IP bot check.
+            docker run -d --name bgutil -p 4416:4416 brainicism/bgutil-ytdlp-pot-provider || true
+            sleep 6
             CK=""
             if [ -n "$YT_COOKIES_B64" ]; then
               printf '%s' "$YT_COOKIES_B64" | base64 -d > cookies.txt && CK="--cookies cookies.txt"
               echo "Using YouTube cookies."
             fi
+            PX=""
+            if [ -n "$YT_PROXY" ]; then
+              PX="--proxy $YT_PROXY"
+              echo "Using proxy."
+            fi
             yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
               --merge-output-format mp4 --concurrent-fragments 18 --no-mtime \
-              --no-playlist --ignore-errors --no-overwrites --no-warnings \
-              $CK -o "input/%(title).100s-%(id)s.%(ext)s" "$REF" || true
+              --no-playlist --no-overwrites --retries 3 --sleep-requests 1 \
+              $CK $PX -o "input/%(title).100s-%(id)s.%(ext)s" "$REF" || true
           fi
           IN=$(ls input/ 2>/dev/null | head -n1)
           if [ -z "$IN" ]; then
