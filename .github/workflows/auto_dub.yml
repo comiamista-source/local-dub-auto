@@ -41,10 +41,6 @@ on:
         description: "Retries per chunk"
         default: "5"
         required: false
-      turbo:
-        description: "Turbo mode (tiny pieces, ALL parallel - fastest, riskier on long videos)"
-        default: "no"
-        required: false
       inbox:
         description: "Drive inbox folder"
         default: "DubInbox"
@@ -66,7 +62,6 @@ env:
   CHUNK: ${{ github.event.inputs.chunk || '60' }}
   WORKERS: ${{ github.event.inputs.workers || '8' }}
   TRIES: ${{ github.event.inputs.tries || '5' }}
-  TURBO: ${{ github.event.inputs.turbo || 'no' }}
   INBOX: ${{ github.event.inputs.inbox || 'DubInbox' }}
   OUTBOX: ${{ github.event.inputs.outbox || 'DubDone' }}
 
@@ -149,7 +144,6 @@ jobs:
           if [ -z "$IN" ]; then echo "::error::Download failed for $NAME"; exit 1; fi
 
           COMMON="--src $SRC --target $TGT --genre $GENRE --speakers $SPEAKERS --dir $GITHUB_WORKSPACE/output --chunk $CHUNK --workers $WORKERS --tries $TRIES"
-          if [ "$TURBO" = "yes" ]; then COMMON="$COMMON --turbo"; fi
 
           python dub_video.py "$GITHUB_WORKSPACE/input/$IN" $COMMON || true
 
@@ -217,3 +211,4 @@ jobs:
           path: output/**
           retention-days: 30
           if-no-files-found: ignore
+
