@@ -1,4 +1,4 @@
-name: Auto Dub from Drive
+﻿name: Auto Dub from Drive
 
 # SOURCES (all automatic):
 #   1. Video files dropped in Drive "DubInbox".
@@ -198,7 +198,7 @@ jobs:
             yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
               --merge-output-format mp4 --concurrent-fragments 18 --no-mtime \
               --no-playlist --no-overwrites --retries 3 --sleep-requests 1 \
-              $CK $PX -o "input/%(title).100s-%(id)s.%(ext)s" "$REF" || true
+              $CK $PX -o "input/%(title).100s.%(ext)s" "$REF" || true
           fi
           IN=$(ls input/ 2>/dev/null | head -n1)
           if [ -z "$IN" ] && [ "$KIND" = "url" ]; then
