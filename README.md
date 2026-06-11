@@ -4,7 +4,7 @@ Fully automatic Hindi -> English (or any supported pair) video dubbing.
 
 ## How it works
 1. Drop videos into the Google Drive folder **DubInbox** (any number).
-2. Every **20 minutes** GitHub Actions wakes up and dubs **all** of them,
+2. Press **Run workflow** in the Actions tab and it dubs **all** of them,
    oldest first. Empty inbox = the run exits in seconds.
 3. Dubbed videos land in **DubDone**; originals move to **DubInbox/archive**.
 
