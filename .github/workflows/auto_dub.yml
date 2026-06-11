@@ -57,7 +57,7 @@ on:
         required: false
       outbox:
         description: "Drive output folder"
-        default: "DubDone2"
+        default: "DubDone"
         required: false
 
 concurrency:
@@ -74,7 +74,7 @@ env:
   WORKERS: ${{ github.event.inputs.workers || '8' }}
   TRIES: ${{ github.event.inputs.tries || '5' }}
   INBOX: ${{ github.event.inputs.inbox || 'DubInbox2' }}
-  OUTBOX: ${{ github.event.inputs.outbox || 'DubDone2' }}
+  OUTBOX: ${{ github.event.inputs.outbox || 'DubDone' }}
 
 jobs:
   scan:
