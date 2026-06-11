@@ -53,11 +53,11 @@ on:
         required: false
       inbox:
         description: "Drive inbox folder"
-        default: "DubInbox"
+        default: "DubInbox2"
         required: false
       outbox:
         description: "Drive output folder"
-        default: "DubDone"
+        default: "DubDone2"
         required: false
 
 concurrency:
@@ -73,8 +73,8 @@ env:
   CHUNK: ${{ github.event.inputs.chunk || '60' }}
   WORKERS: ${{ github.event.inputs.workers || '8' }}
   TRIES: ${{ github.event.inputs.tries || '5' }}
-  INBOX: ${{ github.event.inputs.inbox || 'DubInbox' }}
-  OUTBOX: ${{ github.event.inputs.outbox || 'DubDone' }}
+  INBOX: ${{ github.event.inputs.inbox || 'DubInbox2' }}
+  OUTBOX: ${{ github.event.inputs.outbox || 'DubDone2' }}
 
 jobs:
   scan:
