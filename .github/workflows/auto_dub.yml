@@ -136,7 +136,7 @@ jobs:
     timeout-minutes: 350
     strategy:
       fail-fast: false
-      max-parallel: 4          # 4 videos dub simultaneously
+      max-parallel: 20          # 4 videos dub simultaneously
       matrix:
         item: ${{ fromJSON(needs.scan.outputs.queue) }}
     steps:
